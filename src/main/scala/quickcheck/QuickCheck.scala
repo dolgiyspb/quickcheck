@@ -17,15 +17,16 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
   }
 
   property("minTwo") = forAll { (a: Int, b: Int) =>
-    val min = if (a < b) a else b
-    val max = if (a > b) a else b
-    val h = insert(max, insert(min, empty))
-    ("First min should be #1"    |: findMin(h) == min) &&
-    ("Second min should be #2"   |: findMin(deleteMin(h)) == max)
+    (a > b) ==> {
+      val h = insert(b, insert(a, empty))
+      ("First min should be #1" |: findMin(h) == b) &&
+        ("Second min should be #2" |: findMin(deleteMin(h)) == a)
+    }
+
   }
 
   property("minThree") = forAll { (a: Int, b: Int, c:Int) =>
-    (a > b && b > c) ==> {
+    (a > b) ==> {
       true
     }
   }
